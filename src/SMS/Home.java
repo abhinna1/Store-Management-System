@@ -63,6 +63,7 @@ public class Home {
         panel.add(tbl);
 
 
+
         // Frame settings
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -71,5 +72,6 @@ public class Home {
         frame.setVisible(true);
 
     }
+
 
 }
