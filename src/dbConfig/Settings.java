@@ -20,7 +20,6 @@ public class Settings {
             Class.forName("com.mysql.jdbc.Driver");
             con=DriverManager.getConnection(dbLink, username, password);
             System.out.println("Connected");
-            con.close();
         }
         catch(Exception e){
                 System.out.println(e);

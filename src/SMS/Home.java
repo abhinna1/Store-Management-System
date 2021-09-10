@@ -25,7 +25,7 @@ public class Home {
     private Listener listener;
 
 
-    public void getHomePage(){
+    public void getHomePage() throws SQLException {
         frame = new JFrame();
         panel = new JPanel();
         title = new JLabel("Store Manager");
@@ -57,7 +57,7 @@ public class Home {
         panel.add(searchBtn);
 
         // Create Table
-        ProductTable tb = new ProductTable(frame);
+        ProductTable tb = new ProductTable();
         JScrollPane tbl = tb.getTable();
         tbl.setBounds(15, 90, 350, 200);
         panel.add(tbl);
