@@ -1,7 +1,7 @@
 package dbConfig;
 
 public class DbAcc {
-    public static String url = "jdbc:mysql://127.0.0.1:3306/storedb";
-    public static String username = "Abhinna";
-    public static String password = "$abhi123";
+    public static final String url = "jdbc:mysql://127.0.0.1:3306/storedb";
+    public static final String username = "Abhinna";
+    public static final String password = "$abhi123";
 }

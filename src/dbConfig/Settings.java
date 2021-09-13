@@ -1,5 +1,10 @@
 package dbConfig;
 
+import SMS.Home;
+import SMS.Main;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 
 public class Settings {
@@ -27,16 +32,39 @@ public class Settings {
             }
         return con;
     }
-    public void insertProduct(Connection con, String product_name, int cost_price, int selling_price){
+    public void insertProduct(Connection con, String product_name, int cost_price, int selling_price, JFrame frame){
         try {
             Statement stmt = con.createStatement();
             stmt.execute("insert into tbl_product(product_name, cost_price, selling_price) " +
                     "values(" + "'" + product_name + "'" + ',' + "'" + cost_price + "'" + ',' + "'" + selling_price + "'" + ')' + ';');
-
+            refreshPage(frame);
+            con.close();
         }
         catch(Exception e){
             e.printStackTrace();
         }
+    }
+    public void deleteProduct(Connection con, int pId, JFrame frame){
+        try {
+            Statement stmt = con.createStatement();
+            stmt.execute("delete from tbl_product where product_id = " + Integer.toString(pId) +';');
+            refreshPage(frame);
+            con.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void refreshPage(JFrame frame) throws SQLException {
+        frame.dispose();
+        new Home().getHomePage();
+    }
+
+
+    public static Settings getObject(){
+        Settings settings = new Settings(DbAcc.url, DbAcc.username, DbAcc.password);
+        return settings;
     }
 
 }
