@@ -13,7 +13,6 @@ public class Settings {
     private String password;
     private Connection con;
 
-
     public Settings(String dbLink, String username, String password){
         this.dbLink = dbLink;
         this.username = username;

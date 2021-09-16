@@ -1,18 +1,17 @@
 package SMS;
 
-// User-Defined-Classes
-
 // Java-Classes
-import dbConfig.Settings;
+
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.*;
 
-public class Home implements ActionListener {
+public class Home implements ActionListener, MouseListener {
     private JFrame frame;
     private JPanel panel;
     private JLabel title;
@@ -26,15 +25,20 @@ public class Home implements ActionListener {
     private JScrollPane scroll;
     private JLabel addLbl;
     private JButton delBtn;
+    private JButton deselectBtn;
 
+    public Home(){
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.title = new JLabel("Store Manager");
+        this.searchlbl = new JLabel("Search Item");
+        this.searchBar = new JTextField(80);
+        this.searchBtn = new JButton("Search");
+        this.AddObj = new AddPanel(frame, tbl);
+        this.tb = new ProductTable();
+        this.deselectBtn = new JButton("Delecect rows");
+    }
     public void getHomePage() throws SQLException {
-        frame = new JFrame();
-        panel = new JPanel();
-        title = new JLabel("Store Manager");
-        searchlbl = new JLabel("Search Item");
-        searchBar = new JTextField(80);
-        searchBtn = new JButton("Search");
-        AddObj = new AddPanel(frame);
 
         frame.setBounds(400, 200, 700, 400);
         frame.setTitle("Store Manager");
@@ -59,12 +63,12 @@ public class Home implements ActionListener {
         panel.add(searchBtn);
 
         // Table
-        tb = new ProductTable();
-        tbl = tb.getTable();
+        this.tbl = tb.getTable();
         tbl.isCellEditable(1, 1);
         scroll = new JScrollPane(tbl);
         scroll.setBounds(15, 90, 350, 240);
         panel.add(scroll);
+        tbl.addMouseListener(this);
 
 
 
@@ -74,6 +78,13 @@ public class Home implements ActionListener {
         delBtn.setBounds(10, 335, 80, 20);
         delBtn.addActionListener(this);
         panel.add(delBtn);
+
+        deselectBtn = new JButton("Deselect");
+        deselectBtn.setBackground(Color.RED);
+        deselectBtn.setForeground(Color.BLACK);
+        deselectBtn.setBounds(160, 335, 80, 20);
+        deselectBtn.addActionListener(this);
+        panel.add(deselectBtn);
 
 
         addLbl = new JLabel("Add or Update Products");
@@ -88,7 +99,7 @@ public class Home implements ActionListener {
         panel.add(AddPanel);
 
         // Frame settings
-        ImageIcon img = new ImageIcon("src/SMS/icon.png");
+        ImageIcon img = new ImageIcon("src/SMS/Images/icon.png");
         frame.setIconImage(img.getImage());
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -98,31 +109,64 @@ public class Home implements ActionListener {
         frame.setVisible(true);
     }
 
+    public void update2() throws SQLException {
+
+        tb.getsetData(tbl, AddObj.getNameField(), AddObj.getCpField(), AddObj.getspField());
+//        this.tb.updateTbl(this.tbl, name, cp, sp);
+    }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Settings settings = Settings.getObject();
         if (e.getSource() == searchBtn){
-
+            tb.search(tbl, searchBar.getText());
             System.out.println("Searching");
         }
         if (e.getSource() == delBtn){
-
-            if(tbl.getSelectedRowCount() < 1){
-                JOptionPane.showMessageDialog(new JFrame(), "No row's selected.");
-            }
-            else if(tbl.getSelectedRowCount() > 1){
-                JOptionPane.showMessageDialog(new JFrame(), "Only one row can be selected at a time.");
-            }
-            else{
-                Connection con = settings.connectDb();
-                int pID = Integer.parseInt((String) tbl.getValueAt(tbl.getSelectedRow(), 0));
-                DefaultTableModel dm = (DefaultTableModel) tbl.getModel();
-
-                settings.deleteProduct(con, pID, frame);
+            try {
+                tb.deleteRow(tbl, frame);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
+
+
+        if (e.getSource() == AddObj.getUpdateBtn()){
+            //                productTable.updateTbl();
+            System.out.println("Updating");
+            System.out.println("Updating");
+        }
+        if (e.getSource() == deselectBtn){
+
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (tbl.getSelectedRowCount() == 1){
+            AddObj.getaddBtn().setEnabled(false);
+            tb.getsetData(tbl, AddObj.getNameField(), AddObj.getCpField(), AddObj.getspField());
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
 

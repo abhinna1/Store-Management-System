@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 public class AddPanel implements ActionListener {
@@ -21,9 +22,12 @@ public class AddPanel implements ActionListener {
     private JButton updateBtn;
     private Settings settings;
     private JFrame frame;
+    private JTable tbl;
 
-    public AddPanel(JFrame frame){
+    ProductTable productTable;
+    public AddPanel(JFrame frame, JTable tbl){
         this.frame = frame;
+        this.tbl = tbl;
     }
     public JPanel getAddPanel(){
         panel = new JPanel();
@@ -35,6 +39,7 @@ public class AddPanel implements ActionListener {
         spEnt = new JTextField(30);
         addBtn = new JButton("Add Product");
         updateBtn = new JButton("Update");
+        productTable = new ProductTable();
 
         nameLbl.setBounds(10, 30, 100, 20);
         nameEnt.setBounds(110, 22, 140, 40);
@@ -59,8 +64,9 @@ public class AddPanel implements ActionListener {
         updateBtn.setBounds(150, 202, 110, 30);
         updateBtn.setBackground(Color.BLUE);
         updateBtn.setForeground(Color.WHITE);
-        updateBtn.addActionListener(this);
+        updateBtn.addActionListener(new Home());
         panel.add(updateBtn);
+
 
         panel.setBounds(0, 0, 300, 300);
         panel.setLayout(null);
@@ -69,23 +75,40 @@ public class AddPanel implements ActionListener {
         return panel;
     }
 
+    public JTextField getNameField(){
+        return nameEnt;
+    }
+    public JTextField getCpField(){
+        return cpEnt;
+    }
+    public JTextField getspField(){
+        return spEnt;
+    }
+    public JButton getaddBtn(){
+        return addBtn;
+    }
+    public JButton getUpdateBtn(){return updateBtn;}
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addBtn) {
             if((nameEnt.getText().length()<1)||(cpEnt.getText().length()<1)||(spEnt.getText().length()<1)){
-                JOptionPane.showMessageDialog(new JFrame(), "Enter valid data", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(new JFrame(), "Fill all the credentials.", "Error!", JOptionPane.ERROR_MESSAGE);
             }
             else {
-                settings = Settings.getObject();
-                Connection con = settings.connectDb();
-                int cpInt = Integer.parseInt(cpEnt.getText());
-                int spInt = Integer.parseInt(spEnt.getText());
-                settings.insertProduct(con, nameEnt.getText(), cpInt, spInt, frame);
-                System.out.println("Added");
+                try {
+                    settings = Settings.getObject();
+                    Connection con = settings.connectDb();
+                    int cpInt = Integer.parseInt(cpEnt.getText());
+                    int spInt = Integer.parseInt(spEnt.getText());
+                    settings.insertProduct(con, nameEnt.getText(), cpInt, spInt, frame);
+                    System.out.println("Added");
+                }
+                catch(Exception ex){
+                    JOptionPane.showMessageDialog(new JFrame(), "Invalid Data Entered", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
-        if (e.getSource() == updateBtn){
-            System.out.println("Updating");
-        }
+
     }
 }
