@@ -23,7 +23,6 @@ public class Settings {
         try{
             Class.forName("com.mysql.jdbc.Driver");
             con=DriverManager.getConnection(dbLink, username, password);
-            System.out.println("Connected");
         }
         catch(Exception e){
                 System.out.println(e);
@@ -38,6 +37,8 @@ public class Settings {
                     "values(" + "'" + product_name + "'" + ',' + "'" + cost_price + "'" + ',' + "'" + selling_price + "'" + ')' + ';');
             refreshPage(frame);
             con.close();
+            System.out.println("Connection closed");
+
         }
         catch(Exception e){
             e.printStackTrace();
@@ -46,9 +47,10 @@ public class Settings {
     public void deleteProduct(Connection con, int pId, JFrame frame){
         try {
             Statement stmt = con.createStatement();
-            stmt.execute("delete from tbl_product where product_id = " + Integer.toString(pId) +';');
+            stmt.execute("delete from tbl_product where product_id = " + pId +';');
             refreshPage(frame);
             con.close();
+            System.out.println("Connection closed");
         }
         catch(Exception e){
             e.printStackTrace();

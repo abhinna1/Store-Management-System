@@ -18,7 +18,7 @@ public class ProductTable{
     private String query;
     private Connection con;
     private String[] data;
-    private Settings settings;
+    private static Settings settings;
     private Statement st;
     private ResultSet rs;
     private String pName;
@@ -73,9 +73,11 @@ public class ProductTable{
         }
         else{
             Connection con = settings.connectDb();
+            System.out.println("Connected");
             int pID = Integer.parseInt((String) tbl.getValueAt(tbl.getSelectedRow(), 0));
             settings.deleteProduct(con, pID, frame);
             con.close();
+
         }
     }
 
@@ -86,7 +88,7 @@ public class ProductTable{
         tbl.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter(text));
     }
-    public void getsetData(JTable tbl, JTextField nameEnt, JTextField cpEnt, JTextField spEnt){
+    public static void getsetData(JTable tbl, JTextField nameEnt, JTextField cpEnt, JTextField spEnt){
         // Set TextField values to table data
         int selectedRow = tbl.getSelectedRow();
 
@@ -96,24 +98,27 @@ public class ProductTable{
         nameEnt.setText(name);
         cpEnt.setText(String.valueOf(Integer.parseInt(String.valueOf(cp))));
         spEnt.setText(String.valueOf(Integer.parseInt(String.valueOf(sp))));
-        System.out.println(name+cp+sp);
     }
 
 
-    public void updateTbl(JTable tbl, JTextField nameEnt, JTextField cpEnt, JTextField spEnt) throws SQLException {
-        getsetData(tbl, nameEnt, cpEnt, spEnt);
-        String name = nameEnt.getName();
+    public static void updateTbl(JFrame frame, JTable tbl, JTextField nameEnt, JTextField cpEnt, JTextField spEnt) throws SQLException {
+        String name = nameEnt.getText();
         int cp = Integer.parseInt(cpEnt.getText());
         int sp = Integer.parseInt(spEnt.getText());
         int id = Integer.parseInt((String) tbl.getValueAt(tbl.getSelectedRow(), 0));
-        String statement = "update table tbl_products set" +
-                "product_name = "+"'"+name+"'"+"cost_price = " + cp + "selling_price = "+sp+
-                "where product_id = "+ id;
+        String statement = "update tbl_product " +
+                " set product_name = " + "'" + name + "',"+"cost_price = " + cp + ',' + " selling_price = "+sp+
+                " where product_id = "+ id;
+        System.out.println(statement);
         settings = Settings.getObject();
         Connection con = settings.connectDb();
+        System.out.println("Connected");
         Statement stat = con.createStatement();
         stat.execute(statement);
+        Settings.refreshPage(frame);
         con.close();
+        System.out.println("Connection closed");
+
 
     }
 

@@ -64,7 +64,7 @@ public class AddPanel implements ActionListener {
         updateBtn.setBounds(150, 202, 110, 30);
         updateBtn.setBackground(Color.BLUE);
         updateBtn.setForeground(Color.WHITE);
-        updateBtn.addActionListener(new Home());
+        updateBtn.addActionListener(this);
         panel.add(updateBtn);
 
 
@@ -87,7 +87,6 @@ public class AddPanel implements ActionListener {
     public JButton getaddBtn(){
         return addBtn;
     }
-    public JButton getUpdateBtn(){return updateBtn;}
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -99,14 +98,34 @@ public class AddPanel implements ActionListener {
                 try {
                     settings = Settings.getObject();
                     Connection con = settings.connectDb();
+                    System.out.println("Connected");
                     int cpInt = Integer.parseInt(cpEnt.getText());
                     int spInt = Integer.parseInt(spEnt.getText());
                     settings.insertProduct(con, nameEnt.getText(), cpInt, spInt, frame);
                     System.out.println("Added");
+                    con.close();
                 }
                 catch(Exception ex){
                     JOptionPane.showMessageDialog(new JFrame(), "Invalid Data Entered", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        }
+        if (e.getSource() == updateBtn){
+            try {
+                if(Home.tbl.getSelectedRowCount()<1){
+                    JOptionPane.showMessageDialog(new JFrame(), "No rows selected.", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+                else if(Home.tbl.getSelectedRowCount()>1){
+                    JOptionPane.showMessageDialog(new JFrame(), "Only one row can be updated at a time.", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    productTable.updateTbl(Home.frame, Home.tbl, nameEnt, cpEnt, spEnt);
+                    System.out.println("Updated");
+                }
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println("Error while updating");
             }
         }
 

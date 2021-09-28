@@ -12,16 +12,16 @@ import java.awt.event.MouseListener;
 import java.sql.*;
 
 public class Home implements ActionListener, MouseListener {
-    private JFrame frame;
-    private JPanel panel;
-    private JLabel title;
-    private JLabel searchlbl;
-    private JTextField searchBar;
-    private JButton searchBtn;
-    private AddPanel AddObj;
+    public static JFrame frame;
+    final private JPanel panel;
+    final private JLabel title;
+    final private JLabel searchlbl;
+    final private JTextField searchBar;
+    final private JButton searchBtn;
+    final private AddPanel AddObj;
     private JPanel AddPanel;
-    private ProductTable tb;
-    public JTable tbl;
+    final private ProductTable tb;
+    public static JTable tbl;
     private JScrollPane scroll;
     private JLabel addLbl;
     private JButton delBtn;
@@ -63,13 +63,13 @@ public class Home implements ActionListener, MouseListener {
         panel.add(searchBtn);
 
         // Table
-        this.tbl = tb.getTable();
+        tbl = tb.getTable();
+        tbl.getTableHeader().setReorderingAllowed(false);
         tbl.isCellEditable(1, 1);
         scroll = new JScrollPane(tbl);
         scroll.setBounds(15, 90, 350, 240);
         panel.add(scroll);
         tbl.addMouseListener(this);
-
 
 
         delBtn = new JButton("Delete");
@@ -80,9 +80,9 @@ public class Home implements ActionListener, MouseListener {
         panel.add(delBtn);
 
         deselectBtn = new JButton("Deselect");
-        deselectBtn.setBackground(Color.RED);
+        deselectBtn.setBackground(Color.gray);
         deselectBtn.setForeground(Color.BLACK);
-        deselectBtn.setBounds(160, 335, 80, 20);
+        deselectBtn.setBounds(100, 335, 100, 20);
         deselectBtn.addActionListener(this);
         panel.add(deselectBtn);
 
@@ -109,13 +109,6 @@ public class Home implements ActionListener, MouseListener {
         frame.setVisible(true);
     }
 
-    public void update2() throws SQLException {
-
-        tb.getsetData(tbl, AddObj.getNameField(), AddObj.getCpField(), AddObj.getspField());
-//        this.tb.updateTbl(this.tbl, name, cp, sp);
-    }
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == searchBtn){
@@ -130,19 +123,18 @@ public class Home implements ActionListener, MouseListener {
             }
         }
 
-
-        if (e.getSource() == AddObj.getUpdateBtn()){
-            //                productTable.updateTbl();
-            System.out.println("Updating");
-            System.out.println("Updating");
-        }
         if (e.getSource() == deselectBtn){
-
+            tbl.clearSelection();
+            AddObj.getNameField().setText("");
+            AddObj.getCpField().setText("");
+            AddObj.getspField().setText("");
+            AddObj.getaddBtn().setEnabled(true);
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
         if (tbl.getSelectedRowCount() == 1){
             AddObj.getaddBtn().setEnabled(false);
             tb.getsetData(tbl, AddObj.getNameField(), AddObj.getCpField(), AddObj.getspField());
