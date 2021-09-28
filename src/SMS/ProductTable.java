@@ -106,19 +106,8 @@ public class ProductTable{
         int cp = Integer.parseInt(cpEnt.getText());
         int sp = Integer.parseInt(spEnt.getText());
         int id = Integer.parseInt((String) tbl.getValueAt(tbl.getSelectedRow(), 0));
-        String statement = "update tbl_product " +
-                " set product_name = " + "'" + name + "',"+"cost_price = " + cp + ',' + " selling_price = "+sp+
-                " where product_id = "+ id;
-        System.out.println(statement);
-        settings = Settings.getObject();
-        Connection con = settings.connectDb();
-        System.out.println("Connected");
-        Statement stat = con.createStatement();
-        stat.execute(statement);
+        settings.updateProduct(name, cp, sp, id);
         Settings.refreshPage(frame);
-        con.close();
-        System.out.println("Connection closed");
-
 
     }
 

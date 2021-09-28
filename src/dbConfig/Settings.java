@@ -56,6 +56,16 @@ public class Settings {
             e.printStackTrace();
         }
     }
+    public void updateProduct(String name, int cp, int sp, int id) throws SQLException {
+        String statement = "update tbl_product " +
+                " set product_name = " + "'" + name + "',"+"cost_price = " + cp + ',' + " selling_price = "+sp+
+                " where product_id = "+ id;
+        Settings settings = Settings.getObject();
+        Connection con = settings.connectDb();
+        Statement stat = con.createStatement();
+        stat.execute(statement);
+        con.close();
+    }
 
     public static void refreshPage(JFrame frame) throws SQLException {
         frame.dispose();

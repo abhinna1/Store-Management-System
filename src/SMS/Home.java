@@ -40,7 +40,7 @@ public class Home implements ActionListener, MouseListener {
     }
     public void getHomePage() throws SQLException {
 
-        frame.setBounds(400, 200, 700, 400);
+        frame.setBounds(400, 200, 750, 400);
         frame.setTitle("Store Manager");
         panel.setBounds(0, 0, 800, 600);
         panel.setBackground(Color.PINK);
@@ -67,7 +67,7 @@ public class Home implements ActionListener, MouseListener {
         tbl.getTableHeader().setReorderingAllowed(false);
         tbl.isCellEditable(1, 1);
         scroll = new JScrollPane(tbl);
-        scroll.setBounds(15, 90, 350, 240);
+        scroll.setBounds(15, 90, 400, 240);
         panel.add(scroll);
         tbl.addMouseListener(this);
 
@@ -89,13 +89,13 @@ public class Home implements ActionListener, MouseListener {
 
         addLbl = new JLabel("Add or Update Products");
         addLbl.setFont(searchlbl.getFont().deriveFont(15f));
-        addLbl.setBounds(450, 40, 200, 50);
+        addLbl.setBounds(500, 40, 200, 50);
         addLbl.setForeground(Color.darkGray);
         panel.add(addLbl);
 
         // Add Panel
         AddPanel = AddObj.getAddPanel();
-        AddPanel.setBounds(400, 90, 270, 240);
+        AddPanel.setBounds(450, 90, 270, 240);
         panel.add(AddPanel);
 
         // Frame settings
